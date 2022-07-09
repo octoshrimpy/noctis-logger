@@ -1,4 +1,4 @@
-class asyncLog {
+class Noctis {
   currentMSg = ""
   useStatus = false
   statusPrefix = "[ "
@@ -65,4 +65,5 @@ class asyncLog {
 }
 
 // set it up
-console.re = new asyncLog()
+console.n = new Noctis()
+let noctis = new Noctis()
