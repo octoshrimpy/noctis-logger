@@ -1,13 +1,14 @@
 class Noctis {
+  static ctx = new Noctis()
   currentMSg = ""
   useStatus = false
   statusPrefix = "[ "
   statusCenter = null
   statusSuffix = " ] "
 
-  static updateMessage = () => new Noctis().updateMessage()
+  static updateMessage = (...args) => new Noctis().updateMessage(...args)
   updateMessage(msg) {
-    let ctx = this // || Noctis()
+    let ctx = Noctis.ctx
     ctx.currentMSg = msg
     ctx.replace(ctx.currentMSg)
 
@@ -16,7 +17,7 @@ class Noctis {
 
   static updateStatus = (...args) => new Noctis().updateStatus(...args)
   updateStatus(status) {
-    let ctx = this // || Noctis()
+    let ctx = Noctis.ctx
     ctx.statusCenter = status
     ctx.replace(ctx.currentMSg)
 
@@ -25,13 +26,13 @@ class Noctis {
 
   static getStatus = (...args) => new Noctis().getStatus(...args)
   getStatus() {
-    let ctx = this // || Noctis()
+    let ctx = Noctis.ctx
     return ctx.statusPrefix + ctx.statusCenter + ctx.statusSuffix
   }
 
   static withStatus = (...args) => new Noctis().withStatus(...args)
   withStatus(length = 1) {
-    let ctx = this // || Noctis()
+    let ctx = Noctis.ctx
     ctx.useStatus = true
     ctx.statusCenter = " ".repeat(length)
     return ctx
@@ -39,7 +40,7 @@ class Noctis {
 
   static send = (...args) => new Noctis().send(...args)
   send(...args) {
-    let ctx = this // || Noctis()
+    let ctx = Noctis.ctx
     ctx.currentMSg = args.join(" ")
     ctx.print()
     return ctx
@@ -47,7 +48,7 @@ class Noctis {
 
   static append = (...args) => new Noctis().append(...args)
   append(...args) {
-    let ctx = this // || Noctis()
+    let ctx = Noctis.ctx
     ctx.currentMSg = ctx.currentMSg.concat(args.join(" "))
     ctx.clearConsole(1)
     ctx.print()
@@ -56,7 +57,7 @@ class Noctis {
 
   static replace = (...args) => new Noctis().replace(...args)
   replace(...args) { 
-    let ctx = this // || Noctis()
+    let ctx = Noctis.ctx
     ctx.clearConsole()
     ctx.send(...args)
     return ctx
@@ -65,7 +66,7 @@ class Noctis {
   // https://stackoverflow.com/a/65863081
   static clearConsole = (...args) => new Noctis().clearConsole(...args)
   async clearConsole(count = 1) { 
-    let ctx = this // || Noctis()
+    let ctx = Noctis.ctx
     for (let iter = 1; iter <= count; iter++) {
       process.stdout.moveCursor(0, -1) // up one line
       process.stdout.clearLine(1) // from cursor to end
@@ -75,7 +76,7 @@ class Noctis {
 
   static print = (...args) => new Noctis().print(...args)
   print() {
-    let ctx = this // || Noctis()
+    let ctx = Noctis.ctx
     let prefix = ctx.useStatus ? ctx.getStatus() : ""
     console.log(prefix, ctx.currentMSg)
     return ctx
@@ -87,12 +88,9 @@ console.n = new Noctis()
 let noctis = new Noctis()
 
 
-// console.n.withStatus().send("foo")
-// noctis.withStatus().send("bar")
+// use it
+console.log(console.n.withStatus().send("foo"))
 
-// console.log()
-console.log(Noctis.withStatus().send("foo"))
-console.log(Noctis.updateStatus("o"))
+console.log(noctis.updateStatus('o'))
 
-// Noctis.withStatus().send("baz")
-// Noctis.updateStatus("o")
+console.log(Noctis.updateMessage("bar"))
