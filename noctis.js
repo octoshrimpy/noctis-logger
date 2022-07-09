@@ -92,3 +92,40 @@ let noctis = new Noctis()
 console.n.withStatus().send("foo")
 noctis.updateStatus('o')
 Noctis.updateMessage("bar")
+
+
+
+
+
+
+
+
+
+
+
+// and some fun, too
+// setup timings
+function sleep(ms){
+    return new Promise(res => {
+        setTimeout(res, ms);
+    });
+}
+
+// setup typing
+async function type(msg, speedMod = 1){
+  let sleepTime = 40 + (10*speedMod)
+
+  Noctis.send(msg[0])
+  for (let letter of msg.slice(1).split("")) {
+    // console.log
+    await sleep(sleepTime)
+    Noctis.append(letter)
+  }
+}
+
+// grant sentience
+(async () => {
+  await type("hello human")
+  await type("this is slow", 10)
+  await type("and this is really fast, so fast your human eyes cannot even keep up ha ha ha ha", -5)
+})()
