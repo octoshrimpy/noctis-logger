@@ -89,8 +89,6 @@ let noctis = new Noctis()
 
 
 // use it
-console.log(console.n.withStatus().send("foo"))
-
-console.log(noctis.updateStatus('o'))
-
-console.log(Noctis.updateMessage("bar"))
+console.n.withStatus().send("foo")
+noctis.updateStatus('o')
+Noctis.updateMessage("bar")
