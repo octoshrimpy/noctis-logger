@@ -5,6 +5,7 @@ class Noctis {
   statusPrefix = "[ "
   statusCenter = null
   statusSuffix = " ] "
+  logWidth = 0
 
   static updateMessage = (...args) => new Noctis().updateMessage(...args)
   updateMessage(msg) {
@@ -49,8 +50,8 @@ class Noctis {
   static append = (...args) => new Noctis().append(...args)
   append(...args) {
     let ctx = Noctis.ctx
+    ctx.clearConsole()
     ctx.currentMSg = ctx.currentMSg.concat(args.join(" "))
-    ctx.clearConsole(1)
     ctx.print()
     return ctx
   }
@@ -67,7 +68,14 @@ class Noctis {
   static clearConsole = (...args) => new Noctis().clearConsole(...args)
   async clearConsole(count = 1) { 
     let ctx = Noctis.ctx
-    for (let iter = 1; iter <= count; iter++) {
+
+    let width = process.stdout.columns
+    let length = ctx.logWidth
+    let lineWrapCount = Math.floor(length/width) + 1
+
+    let finalCount = lineWrapCount * count
+
+    for (let iter = 1; iter <= finalCount; iter++) {
       process.stdout.moveCursor(0, -1) // up one line
       process.stdout.clearLine(1) // from cursor to end
     }
@@ -78,14 +86,21 @@ class Noctis {
   print() {
     let ctx = Noctis.ctx
     let prefix = ctx.useStatus ? ctx.getStatus() : ""
-    console.log(prefix, ctx.currentMSg)
+    let msg = prefix + ctx.currentMSg
+    console.log(msg)
+    ctx.logWidth = msg.length
     return ctx
   }
 }
 
+
+
+
 // set it up
 console.n = new Noctis()
 let noctis = new Noctis()
+
+
 
 
 // use it
@@ -96,14 +111,8 @@ Noctis.updateMessage("bar")
 
 
 
-
-
-
-
-
-
-
 // and some fun, too
+
 // setup timings
 function sleep(ms){
     return new Promise(res => {
@@ -128,4 +137,6 @@ async function type(msg, speedMod = 1){
   await type("hello human")
   await type("this is slow", 10)
   await type("and this is really fast, so fast your human eyes cannot even keep up ha ha ha ha", -5)
+  Noctis.updateStatus("x")
+  Noctis.updateMessage("this is test")
 })()
